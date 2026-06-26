@@ -8,6 +8,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3001;
 const DIST_DIR = path.join(__dirname, '../dist');
 
+if (!process.env.XAI_API_KEY) {
+  console.warn('Warning: XAI_API_KEY environment variable is not set. Speech-to-text will fail.');
+}
+
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -39,6 +43,12 @@ const server = http.createServer(async (req, res) => {
       }
 
       try {
+        if (!process.env.XAI_API_KEY) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'XAI_API_KEY is not configured on the server' }));
+          return;
+        }
+
         const buffer = fs.readFileSync(file.filepath);
         const blob = new Blob([buffer], { type: file.mimetype || 'audio/webm' });
 
