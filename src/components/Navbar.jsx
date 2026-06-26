@@ -22,6 +22,11 @@ export default function Navbar() {
               Shop All
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/boats" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+              Boats
+            </NavLink>
+          </li>
         </ul>
         <div className="nav-actions">
           <Link to="/cart" className="cart-icon-btn">
