@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import fs from 'fs';
 import { IncomingForm } from 'formidable';
 
