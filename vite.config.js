@@ -1,17 +1,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { handleTranscribe } from './server/handler.js';
 
-// `base: './'` makes the build portable so the same `dist/` works on
-// Vercel/Netlify (root) and GitHub Pages (sub-path like /ShopMonorepo/).
 export default defineConfig({
-  plugins: [react()],
-  base: './',
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
+  plugins: [
+    react(),
+    {
+      name: 'api-middleware',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          handleTranscribe(req, res, next);
+        });
       },
     },
-  },
+  ],
+  base: './',
 });

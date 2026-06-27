@@ -74,7 +74,13 @@ export default function Notebook() {
         body: formData,
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Server error (${res.status}). Is the dev server running?`);
+      }
+
       if (!res.ok) {
         throw new Error(data.error || 'Transcription failed');
       }
